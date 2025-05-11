@@ -1,0 +1,23 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env
+venv
+.env
+.git
+.gitignore
+.vscode
+.pytest_cache
+*.log
+# Add any other files/folders you don't want in your image
+app/knowledge_base/vector_store/* # Usually, you build this once, or mount it as a volume.
+                                 # For a stateless API server, the vector store might be
+                                 # accessed differently or rebuilt. For simplicity now,
+                                 # we might copy it, but long term it's better managed outside.
+                                 # Let's exclude it for now to keep the image lean.
+                                 # The build_knowledge_base.py script can be run separately
+                                 # or data could be mounted.
+scripts/
+streamlit_app.py

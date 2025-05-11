@@ -1,3 +1,39 @@
+Now we have "Successfully stored 3 items in ChromaDB collection 'faq_collection'" and "Knowledge base build process completed successfully" means our knowledge base is ready and waiting. This is a critical milestone.
+
+**Phase 4: Core RAG Chatbot Logic**.
+
+This is where we build the "brains" of our chatbot. We'll create a service that takes a user's query, searches our newly created knowledge base for relevant information, and then uses your local Ollama model (`koesn/llama3-8b-instruct:latest`) to generate an empathetic and contextually appropriate answer.
+
+We will implement this logic in the `app/chatbot_service.py` file.
+
+---
+
+**Phase 4: Core RAG Chatbot Logic**
+
+**1. User Query Processing & Service Setup:**
+
+* **What:** We'll set up a Python class or a set of functions in `chatbot_service.py` that will handle the end-to-end RAG process. This service will load necessary configurations, initialize clients for the embedding model, vector database, and the Ollama LLM.
+* **Why:** Encapsulating this logic into a service makes our application modular and easier to manage. It separates the core AI functionality from the API layer (which we'll build in Phase 5).
+* **File:** `rag_chatbot_coeo/app/chatbot_service.py`
+
+**Core Components of `ChatbotService`:**
+
+1.  **Initialization (`__init__`)**:
+    * Load environment variables (Ollama base URL, dummy API key).
+    * Initialize the SentenceTransformer model (for embedding user queries). This must be the *same model* used to embed the knowledge base (`all-MiniLM-L6-v2`).
+    * Initialize the ChromaDB client and connect to our existing `faq_collection`.
+    * Initialize the OpenAI client, configured to point to your Ollama server.
+2.  **Main Processing Function (e.g., `generate_response`)**:
+    * Takes a user query string as input.
+    * Embeds the user query.
+    * Performs a similarity search in ChromaDB to retrieve relevant FAQ chunks (context).
+    * Constructs a detailed prompt for the Ollama LLM, including the retrieved context and the user's query, guiding it to be empathetic and answer based *only* on the context.
+    * Sends the prompt to the Ollama LLM.
+    * Returns the LLM's generated response.
+
+Let's start building `app/chatbot_service.py`:
+
+```python
 # rag_chatbot_coeo/app/chatbot_service.py
 
 import os
@@ -190,3 +226,62 @@ if __name__ == '__main__':
         print(f"An error occurred during the test: {e}")
         import traceback
         traceback.print_exc()
+
+```
+
+**Explanation of Key Parts:**
+
+* **`__init__(self)`**:
+    * Loads the same `SentenceTransformer` model used in `build_knowledge_base.py`. This is crucial because queries must be embedded into the same vector space as the knowledge base documents.
+    * Connects to your existing ChromaDB `PersistentClient` and gets the `faq_collection`.
+    * Initializes the `OpenAI` client. Notice `base_url=OLLAMA_BASE_URL` and `api_key=OLLAMA_API_KEY`. This tells the client to talk to your local Ollama server instead of the actual OpenAI servers. The `api_key` is often a dummy string like "ollama" or "notneeded" because Ollama doesn't typically authenticate this for local access.
+* **`_embed_query(self, query: str)`**: Simple method to transform the text query into a vector.
+* **`_retrieve_context(self, query_embedding, n_results=3)`**:
+    * Uses `self.collection.query(...)` from ChromaDB.
+    * `query_embeddings` takes a list of embeddings (we send one).
+    * `n_results` specifies how many top matching documents to retrieve.
+    * `include=['documents', 'metadatas', 'distances']` asks ChromaDB to return the actual text content of the retrieved chunks, their associated metadata, and their distance scores (lower distance means more similar).
+* **`_construct_prompt(self, query: str, context_documents: list)`**:
+    * **This is a critical step for RAG and LLM performance.**
+    * It takes the original user query and the text documents retrieved from ChromaDB.
+    * It formats them into a single string (the prompt) that instructs the LLM:
+        * Its role (empathetic AI assistant).
+        * The constraint to use *only* the provided context.
+        * How to behave if the answer isn't in the context (state it clearly).
+        * The actual context and the user's question.
+    * This detailed instruction helps prevent hallucinations and keeps the LLM's responses grounded in your knowledge base.
+* **`_generate_llm_response(self, prompt: str)`**:
+    * Uses `self.llm_client.chat.completions.create(...)`. This is the standard way to interact with chat-based models using the OpenAI client library.
+    * `model=OLLAMA_MODEL_NAME`: **Crucial!** This tells Ollama which of your local models to use (e.g., `koesn/llama3-8b-instruct:latest`).
+    * `messages=[...]`: The standard chat format, often with a system message setting the AI's persona and a user message containing the full prompt.
+    * `temperature=0.3`: A lower temperature (e.g., 0.2 to 0.5) makes the output more focused, deterministic, and less "creative," which is usually desired for fact-based RAG. Higher values (e.g., 0.7-1.0) make it more random and creative.
+* **`get_rag_response(self, query: str)`**: The main public method that orchestrates the steps: embed query -> retrieve context -> construct prompt -> generate LLM response.
+
+**To Test `chatbot_service.py` (Before API Integration):**
+
+1.  **Ensure Ollama is Running:** Make sure your Ollama application is running and the `koesn/llama3-8b-instruct:latest` model (or whichever model you specified in `OLLAMA_MODEL_NAME`) is available and loaded or can be loaded by Ollama. You might want to run `ollama run koesn/llama3-8b-instruct:latest` in a separate terminal once to ensure it's loaded if it's not set to preload.
+2.  **Ensure `faqs.json` and Vector Store Exist:** Your knowledge base and vector store from Phase 3 must be in place.
+3.  **Activate Virtual Environment:** `(venv)` should be active.
+4.  **Run the Script Directly:**
+    From your project root (`rag_chatbot_coeo`), you can run:
+    ```bash
+    python app/chatbot_service.py
+    ```
+    The `if __name__ == '__main__':` block will execute, initialize the service, and try the test queries. Observe the console output for logging messages and the chatbot's answers.
+
+**Key Concepts Reinforced:**
+
+* **RAG Pipeline:** You've now implemented the core Retrieve-Augment-Generate flow.
+* **Modularity:** The `ChatbotService` class encapsulates the AI logic.
+* **Prompt Engineering:** The careful construction of the prompt is vital for controlling LLM behavior.
+* **OpenAI-Compatible API (Ollama):** Leveraging the `openai` library to talk to a local Ollama instance simplifies integration.
+
+**Alternatives & Considerations:**
+
+* **Different LLM Client:** If not using an OpenAI-compatible endpoint from Ollama (though it's recommended), you might use a direct HTTP client or a specific library if Ollama provided one.
+* **Context Handling:** More advanced strategies could involve re-ranking retrieved documents, dynamically choosing `n_results`, or summarizing context if it's too long for the LLM's context window (though models like Llama 3 have large context windows).
+* **Error Handling:** The current error handling is basic. A production system would have more robust error logging and recovery mechanisms.
+
+---
+
+This is a substantial phase! Pay attention to the prompts being constructed and the responses from Ollama. Debug any issues with paths, model names, or client initializations.

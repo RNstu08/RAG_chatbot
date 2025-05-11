@@ -1,0 +1,17 @@
+[
+  {
+    "id": "faq001",
+    "question": "What are the available methods for making a payment?",
+    "answer": "You can make a payment through several convenient methods, including online bank transfer, setting up a direct debit, or speaking with one of our agents to process a card payment over the phone. We are here to help you find the option that works best for you."
+  },
+  {
+    "id": "faq002",
+    "question": "How can I confirm that this communication is genuinely from your organization?",
+    "answer": "We understand the importance of security. You can verify our legitimacy by checking our official contact details on our website or by calling us back on a publicly listed phone number. Please never share full passwords or sensitive personal details unless you are certain of the contact's authenticity."
+  },
+  {
+    "id": "faq003",
+    "question": "I'm worried I can't afford to pay the full amount immediately.",
+    "answer": "We understand that financial situations can be challenging. Please contact us to discuss your circumstances. We have various options, such as setting up a manageable payment plan, and we're committed to working with you to find a suitable solution."
+  }
+]

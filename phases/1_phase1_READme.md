@@ -18,9 +18,9 @@ This phase is about setting a clear direction and understanding the "what" and "
         4.  Focus on empathetic response generation through prompt engineering.
         5.  Provide a REST API endpoint for the chatbot.
 * **Why:**
-    * This directly addresses Coeo's need for AI solutions ("cAI platform") that are customer-centric and leverage Generative AI.
+    * This directly addresses AI platform that are customer-centric and leverage Generative AI.
     * The RAG approach is specifically mentioned as a desired skill (making LLMs more factual).
-    * Building this provides hands-on experience with key technologies Coeo uses/values.
+    * Building this provides hands-on experience with key technologies uses/values and using Ollama demonstrates adaptability with different LLM hosting solutions.
 * **Key Concepts:**
     * **MVP (Minimum Viable Product):** The simplest version of a product that can be released to get user feedback. It helps in focusing on core functionality first.
     * **User Stories (Example):**
@@ -34,24 +34,31 @@ This phase is about setting a clear direction and understanding the "what" and "
     * **Programming Language: Python**
         * *Why:* Industry standard for AI/ML; rich ecosystem of libraries (Scikit-learn, PyTorch, TensorFlow); Coeo explicitly requires strong Python skills.
     * **LLM: OpenAI API (e.g., gpt-3.5-turbo, gpt-4o)**
-        * *Why:* High-quality models, easy to integrate via API for a PoC. Good for focusing on RAG logic rather than model hosting initially. Coeo mentions Gen-AI services, and OpenAI is a leading provider.
-        * *Alternatives:* Open-source models (Llama, Mistral – require more setup), other commercial APIs (Anthropic Claude, Google Gemini). For Coeo's context, **Azure OpenAI Service** would be the eventual target in their environment.
-    * **Embedding Model: Sentence-Transformers (e.g., `all-MiniLM-L6-v2`)**
-        * *Why:* Good quality, runs locally, easy to use, integrates well for creating document embeddings for RAG.
+        * *Why:* High-quality models, easy to integrate via API for a PoC. Good for focusing on RAG logic rather than model hosting initially. 
+    * **LLM Engine: Ollama (running open-source models like Llama 3, Mistral, Phi-3, etc., locally)**
+        * *Why*:
+            - Cost-effective: No API call costs for generation.
+            Privacy: Data (prompts and generated text) stays on your local machine.
+            - Control & Flexibility: Allows experimentation with various open-source models. Many models are highly capable.
+            Offline Capability: Can work without an internet connection once models are downloaded.
+            - OpenAI-Compatible API: Ollama provides a local server endpoint that mimics the OpenAI API structure. This means we can often use the openai Python library with minimal changes, simply by redirecting it to our local Ollama URL. This is a huge advantage for development and aligns with the skills Coeo might look for (interfacing with RESTful AI services).
+        * *Alternatives*: Directly using Hugging Face transformers library for local models (more complex setup), other local LLM runners (like LM Studio), or cloud-based APIs (OpenAI, Google Gemini API, Azure OpenAI – these would involve costs or free tier limitations).
+    * **Embedding Model: Sentence-Transformers (e.g., `all-MiniLM-L6-v2` or `nomic-embed-text` if run via Ollama)**
+        * *Why:* Good quality, runs locally, easy to use for creating document embeddings for RAG. `sentence-transformers` is a widely used Python library. Some embedding models can also be served via Ollama, which offers another integration path. We'll likely start with `sentence-transformers` directly in Python for simplicity.
         * *Alternatives:* OpenAI Embeddings API (ada-002), other open-source embedding models.
     * **Vector Database (Local): FAISS (Facebook AI Similarity Search) or ChromaDB**
         * *Why:*
             * `FAISS`: Very efficient for similarity search, runs in memory. Good for smaller datasets and local development.
             * `ChromaDB`: Simpler API, designed for AI applications, good for local development, persists to disk easily. Let's lean towards **ChromaDB** for its ease of use for this project.
-        * *Why (Cloud/Production):* For Coeo's stack, **Azure AI Search** (formerly Azure Cognitive Search) would be the go-to for its vector search capabilities and integration within the Azure ecosystem.
+        * *Why (Cloud/Production):* For stack, **Azure AI Search** (formerly Azure Cognitive Search) would be the go-to for its vector search capabilities and integration within the Azure ecosystem.
         * *Alternatives:* Pinecone, Weaviate, Milvus (more complex setup).
     * **API Framework: FastAPI**
         * *Why:* Modern, high-performance Python framework for building APIs. Automatic data validation (with Pydantic) and API documentation (Swagger UI).
         * *Alternatives:* Flask (simpler for very small APIs, but FastAPI offers more out-of-the-box for robust services), Django (full-stack, overkill for just an API).
     * **Containerization: Docker**
-        * *Why:* Package the application and its dependencies for consistent deployment. Coeo lists Docker experience.
+        * *Why:* Package the application and its dependencies for consistent deployment. *Note*: Dockerizing an application that relies on a system-installed Ollama needs careful consideration for deployment, but for local development and the API part, it's fine.
     * **Cloud Platform (Eventual Deployment): Microsoft Azure**
-        * *Why:* Coeo explicitly states Azure as their cloud platform (Azure AI/ML, Azure Cognitive Services, Azure Bot Service, etc.). We will design with Azure in mind for later phases.
+        * *Why:* explicitly states Azure as their cloud platform (Azure AI/ML, Azure Cognitive Services, Azure Bot Service, etc.). We will design with Azure in mind for later phases.
 
 **3. Ethical Considerations & Data (Mock Data):**
 
@@ -62,13 +69,13 @@ This phase is about setting a clear direction and understanding the "what" and "
     * **Bias:** AI models can inherit biases from their training data. While we are using pre-trained models, the content of our knowledge base should be carefully crafted to be fair and unbiased.
     * **Transparency:** Ideally, the chatbot should state that it's an AI assistant.
 * **Why:**
-    * Building trust is crucial, especially in finance and debt collection. Coeo's "customer centricity" demands high ethical standards. Neglecting these can lead to reputational damage, legal issues, and harm to customers.
+    * Building trust is crucial, especially in finance and debt collection. "customer centricity" demands high ethical standards. Neglecting these can lead to reputational damage, legal issues, and harm to customers.
 
 **4. Project Structure Setup:**
 
 * **What:** Let's create a root directory for our project and a basic structure.
     ```
-    rag_chatbot_coeo/
+    rag_chatbot/
     ├── app/                  # Core application logic (API, chatbot service)
     │   ├── __init__.py
     │   ├── main.py           # FastAPI app definition
@@ -90,8 +97,8 @@ This phase is about setting a clear direction and understanding the "what" and "
     * **Collaboration:** Standard structures help team members navigate the codebase.
 * **Commands (run in your terminal/shell):**
     ```bash
-    mkdir rag_chatbot_coeo
-    cd rag_chatbot_coeo
+    mkdir rag_chatbot
+    cd rag_chatbot
     mkdir -p app/knowledge_base/vector_store app/models tests scripts
     touch app/__init__.py app/main.py app/chatbot_service.py app/models/__init__.py app/knowledge_base/faqs.json
     touch tests/__init__.py scripts/__init__.py
@@ -305,16 +312,11 @@ By running these PowerShell commands, we will successfully create the desired pr
 
 * **What:** For our MVP, success means:
     1.  The chatbot correctly retrieves relevant information from the FAQ knowledge base for a given query.
-    2.  The chatbot uses the retrieved information to generate a coherent and contextually appropriate answer.
+    2.  The chatbot uses the retrieved information to generate a coherent and contextually appropriate answer using the selected model running in Ollama.
     3.  The tone of the chatbot's response is generally empathetic and helpful (as guided by the system prompt).
     4.  The API endpoint successfully receives requests and returns responses.
     5.  The system does *not* answer questions for which it has no relevant information in its knowledge base (or clearly states it cannot answer).
-* **Why:** These metrics will help us evaluate if the core RAG functionality is working and if we are meeting the basic empathetic requirements. More sophisticated evaluation (e.g., RAGAS framework, human evaluation panels) would be for later stages.
-
+* **Why:** - These metrics will help us evaluate if the core RAG functionality is working and if we are meeting the basic empathetic requirements. More sophisticated evaluation (e.g., RAGAS framework, human evaluation panels) would be for later stages.
+- The choice of model within Ollama might affect the quality and nuance of responses, so iteration on model selection and prompting will be part of the process
 ---
-
-This concludes Phase 1. We have a clear plan, project structure, and version control in place.
-
-**Next, we will move to Phase 2: Development Environment Setup.**
-
-Do you have any questions about Phase 1 before we proceed? Or are you ready to move on?
+---

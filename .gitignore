@@ -123,3 +123,5 @@ app/knowledge_base/vector_store/*.parquet # if Chroma persists with parquet file
 
 # pytest cache
 .pytest_cache/
+
+app/knowledge_base/vector_store/
