@@ -1,7 +1,5 @@
 
 ---
-
-```markdown
 # RAG Chatbot with Local LLM
 
 ## Overview
