@@ -1,3 +1,4 @@
+---
 **Project : Empathetic RAG Chatbot for Debt Collection FAQs**
 
 **I. Project Foundation & Planning (Phase 1)**
