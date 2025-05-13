@@ -1,7 +1,7 @@
 ---
 **Project : Empathetic RAG Chatbot for Debt Collection FAQs**
 
-**I. Project Foundation & Planning (Phase 1)**
+* **I. Project Foundation & Planning (Phase 1)**
     1.  **Project Goal & Scope Definition:**
         * What: Define the chatbot's purpose (MVP - Minimum Viable Product).
         * Why: Align with Coeo's customer-centric approach and GenAI focus.
@@ -25,7 +25,7 @@
         * What: How will we know the chatbot is working well at a basic level? (e.g., answers relevant questions, provides contextually appropriate information).
         * Why: To guide development and testing.
 
-**II. Development Environment Setup (Phase 2)**
+* **II. Development Environment Setup (Phase 2)**
     1.  **Python Virtual Environment:**
         * What: Set up an isolated Python environment.
         * Why: Avoid dependency conflicts between projects.
@@ -43,7 +43,7 @@
         * Why: Security best practice; never hardcode API keys.
         * Key Concepts: Environment Variables.
 
-**III. Knowledge Base Preparation (Phase 3)**
+* **III. Knowledge Base Preparation (Phase 3)**
     1.  **Create FAQ/Knowledge Base Content:**
         * What: Draft a set of common questions and answers related to debt collection (e.g., "What are my payment options?", "Why have I been contacted?", "I don't believe I owe this debt."). Focus on empathetic and clear language.
         * Why: This is the "R" (Retrieval) in RAG – the information our LLM will use.
@@ -63,7 +63,7 @@
         * Key Concepts: Vector Store, Indexing, Similarity Search.
         * Alternatives: Pinecone, Weaviate, Azure AI Search.
 
-**IV. Core RAG Chatbot Logic (Phase 4)**
+* **IV. Core RAG Chatbot Logic (Phase 4)**
     1.  **User Query Processing:**
         * What: Function to take a user's question.
         * Why: Starting point of the RAG pipeline.
@@ -84,7 +84,7 @@
         * What: Receive the LLM's response. Implement basic error handling (e.g., if no relevant context is found, or if the LLM API fails).
         * Why: Provide a complete response or graceful failure.
 
-**V. API Development with FastAPI (Phase 5)**
+* **V. API Development with FastAPI (Phase 5)**
     1.  **API Design:**
         * What: Define API endpoints (e.g., `/chat` (POST)), request/response models using Pydantic.
         * Why: Standardized way for a frontend or other services to interact with the chatbot.
@@ -97,7 +97,7 @@
         * Why: Ensure the API works as expected.
         * Commands: `uvicorn main:app --reload`.
 
-**VI. Simple User Interface (Optional, but Recommended) (Phase 6)**
+* **VI. Simple User Interface (Optional, but Recommended) (Phase 6)**
     1.  **CLI Interface:**
         * What: Create a simple command-line interface to interact with the chatbot logic directly or via the API.
         * Why: Easy initial testing without needing a separate frontend.
@@ -106,7 +106,7 @@
         * Why: Provides a user-friendly way to demonstrate and test the chatbot quickly.
         * Key Concepts: Rapid Prototyping.
 
-**VII. Containerization & Basic MLOps (Phase 7)**
+* **VII. Containerization & Basic MLOps (Phase 7)**
     1.  **Write a Dockerfile:**
         * What: Define the environment and dependencies to package the application.
         * Why: Ensures consistent deployment across different environments.
@@ -119,7 +119,7 @@
         * What: Discuss how CI/CD pipelines (e.g., GitHub Actions, Azure DevOps) would automate building, testing, and deploying the Docker image.
         * Why: Streamlines development and deployment, improves reliability.
 
-**VIII. Deployment to Azure (Simplified) (Phase 8)**
+* **VIII. Deployment to Azure (Simplified) (Phase 8)**
     1.  **Azure Service Options Overview:**
         * What: Briefly discuss options like Azure App Service (for web apps/APIs), Azure Container Instances (for single containers), Azure Kubernetes Service (AKS, for complex orchestration), Azure Functions (for serverless).
         * Why: Understand where different components might live in a cloud environment.
@@ -133,7 +133,7 @@
         * What: Discuss using Azure OpenAI for better governance, private networking, and potentially fine-tuning.
         * Why: Enterprise-grade AI service deployment.
 
-**IX. Testing, Evaluation & Iteration (Phase 9)**
+* **IX. Testing, Evaluation & Iteration (Phase 9)**
     1.  **Functional Testing:**
         * What: Test various questions, including edge cases (irrelevant questions, ambiguous questions).
         * Why: Ensure robustness.
@@ -144,7 +144,7 @@
         * What: Knowledge base gaps, prompt weaknesses, model limitations.
         * Why: Continuous improvement.
 
-**X. Documentation & Future Enhancements (Phase 10)**
+* **X. Documentation & Future Enhancements (Phase 10)**
     1.  **README File:**
         * What: Document project setup, how to run, API usage.
         * Why: Essential for maintainability and sharing.
