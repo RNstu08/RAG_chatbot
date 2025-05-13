@@ -4,11 +4,11 @@
 * **I. Project Foundation & Planning (Phase 1)**
     1.  **Project Goal & Scope Definition:**
         * What: Define the chatbot's purpose (MVP - Minimum Viable Product).
-        * Why: Align with Coeo's customer-centric approach and GenAI focus.
+        * Why: Align with customer-centric approach and GenAI focus.
         * Key Concepts: MVP, User Stories.
     2.  **Technology Stack Selection:**
         * What: Python, LLM (OpenAI API), Embedding Model (Sentence-Transformers), Vector Database (FAISS/Chroma locally, Azure AI Search for cloud), API Framework (FastAPI), Docker, Azure (for eventual deployment).
-        * Why: Balance ease of development, industry relevance, and Coeo's stated preferences.
+        * Why: Balance ease of development, industry relevance, and stated preferences.
         * Alternatives: Other LLMs, vector DBs, API frameworks.
     3.  **Ethical Considerations & Data (Mock Data):**
         * What: Discuss handling sensitive topics in debt collection, ensuring empathetic responses, and the importance of using mock/anonymized data.
@@ -97,7 +97,7 @@
         * Why: Ensure the API works as expected.
         * Commands: `uvicorn main:app --reload`.
 
-* **VI. Simple User Interface (Optional, but Recommended) (Phase 6)**
+* **VI. Simple User Interface (Phase 6)**
     1.  **CLI Interface:**
         * What: Create a simple command-line interface to interact with the chatbot logic directly or via the API.
         * Why: Easy initial testing without needing a separate frontend.
@@ -139,7 +139,7 @@
         * Why: Ensure robustness.
     2.  **Qualitative Evaluation:**
         * What: Assess the empathy, clarity, and helpfulness of responses.
-        * Why: Key for Coeo's customer-centric goal.
+        * Why: Key for customer-centric goal.
     3.  **Identifying Areas for Improvement:**
         * What: Knowledge base gaps, prompt weaknesses, model limitations.
         * Why: Continuous improvement.
