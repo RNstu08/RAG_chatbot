@@ -11,7 +11,7 @@ This phase is about setting a clear direction and understanding the "what" and "
 
 * **What:**
     * **Goal:** To develop a Proof-of-Concept (PoC) AI chatbot that can answer common customer queries related to debt collection in an empathetic, accurate, and helpful manner. It will use a Retrieval Augmented Generation (RAG) architecture.
-    * **MVP Scope:**
+    * **MVP (Minimum Viable Product) Scope:**
         1.  The chatbot will answer questions based *solely* on a predefined knowledge base of FAQs (which we will create).
         2.  It will handle single-turn conversations (user asks a question, chatbot answers). No memory of past interactions in this MVP.
         3.  Interactions will be text-based.
