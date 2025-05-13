@@ -26,13 +26,13 @@ This phase is about setting a clear direction and understanding the "what" and "
     * **User Stories (Example):**
         * "As a customer, I want to ask about my payment options so that I can understand how to resolve my debt."
         * "As a customer, I want to understand why I have been contacted so that I can verify the legitimacy of the communication."
-        * "As a Coeo agent (or for internal quality check), I want the chatbot to provide empathetic responses so that it aligns with our customer-centric values."
+        * "As a customer agent (or for internal quality check), I want the chatbot to provide empathetic responses so that it aligns with our customer-centric values."
 
 **2. Technology Stack Selection:**
 
 * **What & Why:**
     * **Programming Language: Python**
-        * *Why:* Industry standard for AI/ML; rich ecosystem of libraries (Scikit-learn, PyTorch, TensorFlow); Coeo explicitly requires strong Python skills.
+        * *Why:* Industry standard for AI/ML; rich ecosystem of libraries (Scikit-learn, PyTorch, TensorFlow)s.
     * **LLM: OpenAI API (e.g., gpt-3.5-turbo, gpt-4o)**
         * *Why:* High-quality models, easy to integrate via API for a PoC. Good for focusing on RAG logic rather than model hosting initially. 
     * **LLM Engine: Ollama (running open-source models like Llama 3, Mistral, Phi-3, etc., locally)**
@@ -40,9 +40,9 @@ This phase is about setting a clear direction and understanding the "what" and "
             - Cost-effective: No API call costs for generation.
             Privacy: Data (prompts and generated text) stays on your local machine.
             - Control & Flexibility: Allows experimentation with various open-source models. Many models are highly capable.
-            Offline Capability: Can work without an internet connection once models are downloaded.
-            - OpenAI-Compatible API: Ollama provides a local server endpoint that mimics the OpenAI API structure. This means we can often use the openai Python library with minimal changes, simply by redirecting it to our local Ollama URL. This is a huge advantage for development and aligns with the skills Coeo might look for (interfacing with RESTful AI services).
-        * *Alternatives*: Directly using Hugging Face transformers library for local models (more complex setup), other local LLM runners (like LM Studio), or cloud-based APIs (OpenAI, Google Gemini API, Azure OpenAI – these would involve costs or free tier limitations).
+            - Offline Capability: Can work without an internet connection once models are downloaded.
+            - OpenAI-Compatible API: Ollama provides a local server endpoint that mimics the OpenAI API structure. This means we can often use the openai Python library with minimal changes, simply by redirecting it to our local Ollama URL. This is a huge advantage for development (interfacing with RESTful AI services).
+        * *Alternatives*: Directly using `Hugging Face transformers library` for local models (more complex setup), other local LLM runners (like LM Studio), or cloud-based APIs (OpenAI, Google Gemini API, Azure OpenAI – these would involve costs or free tier limitations).
     * **Embedding Model: Sentence-Transformers (e.g., `all-MiniLM-L6-v2` or `nomic-embed-text` if run via Ollama)**
         * *Why:* Good quality, runs locally, easy to use for creating document embeddings for RAG. `sentence-transformers` is a widely used Python library. Some embedding models can also be served via Ollama, which offers another integration path. We'll likely start with `sentence-transformers` directly in Python for simplicity.
         * *Alternatives:* OpenAI Embeddings API (ada-002), other open-source embedding models.
@@ -58,7 +58,7 @@ This phase is about setting a clear direction and understanding the "what" and "
     * **Containerization: Docker**
         * *Why:* Package the application and its dependencies for consistent deployment. *Note*: Dockerizing an application that relies on a system-installed Ollama needs careful consideration for deployment, but for local development and the API part, it's fine.
     * **Cloud Platform (Eventual Deployment): Microsoft Azure**
-        * *Why:* explicitly states Azure as their cloud platform (Azure AI/ML, Azure Cognitive Services, Azure Bot Service, etc.). We will design with Azure in mind for later phases.
+        * *Why:* cloud platform (Azure AI/ML, Azure Cognitive Services, Azure Bot Service, etc.). We will design with Azure in mind for later phases.
 
 **3. Ethical Considerations & Data (Mock Data):**
 
